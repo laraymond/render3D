@@ -39,8 +39,12 @@ function init(){
     renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize( window.innerWidth, window.innerHeight );
 
-    
+    // Append Renderer to DOM
     document.body.appendChild( renderer.domElement );
+
+
+
+    //Load each frame and generate a mesh
     var frame1 = addPCD("1");
     var frame2 = addPCD("2");
     var frame3 = addPCD("3");
@@ -49,6 +53,10 @@ function init(){
     var frame6 = addPCD("6");
     var frame7 = addPCD("7");
     var frame8 = addPCD("8");
+
+    //this add on wait that each mesh generated is loaded and reach 
+    //1sec before refreshing the scene with a new frame. 
+    //In this part it is possible to change the timing with the real time generated from the recording
     Promise.all([
         frame1, 
         frame2,
@@ -74,35 +82,35 @@ function init(){
     // Load a PCD file.
     function addPCD(frame) {
         return new Promise(function(resolve, reject) {
-    loader.load(
-        // resource URL
-        './frames/ptcloud-rotated-15:08:05frame'+frame+'.pcd',
-        // called when the resource is loaded
-        function ( mesh ) {
-            resolve(mesh)
-            mesh.material.size*=5;
-            mesh.material.needsUpdate=true;
-            mesh.material.color.set("#ffb3b3");
-            mesh.material.needsUpdate=true;
-            var center = mesh.geometry.boundingSphere.center;
-            controls.target.set( center.x, center.y, center.z );
-            controls.update();
+            loader.load(
+            // resource URL
+            './frames/ptcloud-rotated-15:08:05frame'+frame+'.pcd',
+            // called when the resource is loaded && render the mesh 
+                function ( mesh ) {
+                    resolve(mesh)
+                    mesh.material.size*=5;
+                    mesh.material.needsUpdate=true;
+                    mesh.material.color.set("#ffb3b3");
+                    mesh.material.needsUpdate=true;
+                    var center = mesh.geometry.boundingSphere.center;
+                    controls.target.set( center.x, center.y, center.z );
+                    controls.update();
 
-        },
-        // called when loading is in progresses
-        function ( xhr ) {
-            console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-        },
-        // called when loading has errors
-        function ( error ) {
-            console.log( 'An error happened' );
-        }
-    );
-    });
+                },
+                // called when loading is in progresses
+                function ( xhr ) {
+                    console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+                },
+                // called when loading has errors
+                function ( error ) {
+                    console.log( 'An error happened' );
+                }
+            );
+        });
     }
     window.addEventListener( 'resize', onWindowResize, false );
 }
-//
+// Camera and render resize the content of the canvas 
 function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
