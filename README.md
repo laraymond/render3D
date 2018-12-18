@@ -1,7 +1,16 @@
 # render3D
 rendering the pcd files 
 
+How to run
+---
 
+On Chrome
+  In the terminal, install a mini server: ´npm install -g pushserve´. Then, navigate to the project root folder 
+  and run 'pushserve'. It will create a localhost.
+On firefox
+  Just open the index.html
+
+There is a video that shows the visualisation of the scanner over 7s.
 
 Methods
 ---
